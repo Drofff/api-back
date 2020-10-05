@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ua.ozzy.apiback.configuration.properties.JwtProperties;
 import ua.ozzy.apiback.exception.ValidationException;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import static ua.ozzy.apiback.util.ValidationUtil.validateNotNull;
 
 @Service
+@Primary
 public class JwtAuthorizationService implements AuthorizationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JwtAuthorizationService.class);
