@@ -1,0 +1,17 @@
+package ua.ozzy.apiback.service;
+
+import ua.ozzy.apiback.model.BotApiInfo;
+
+import java.util.Optional;
+
+public interface BotApiInfoService {
+
+    BotApiInfo getFirstBotApiInfo();
+
+    BotApiInfo getBotApiInfoById(String id);
+
+    Optional<BotApiInfo> getBotApiInfoByAccessKeyHash(String accessKeyHash);
+
+    boolean isValidAccessKeyForBotApi(String accessKey, BotApiInfo botApiInfo);
+
+}
