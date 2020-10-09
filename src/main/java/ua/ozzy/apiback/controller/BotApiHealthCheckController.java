@@ -5,14 +5,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.ozzy.apiback.dto.BotApiHealthCheckDto;
 import ua.ozzy.apiback.dto.BotApiHealthCheckRequestDto;
-import ua.ozzy.apiback.dto.BotApiSubmitHealthCheckDto;
 import ua.ozzy.apiback.dto.MessageDto;
 import ua.ozzy.apiback.mapper.BotApiHealthCheckDtoMapper;
 import ua.ozzy.apiback.model.BotApiHealthCheck;
+import ua.ozzy.apiback.model.BotApiInfo;
 import ua.ozzy.apiback.service.BotApiHealthCheckService;
+import ua.ozzy.apiback.util.AuthUtil;
 
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class BotApiHealthCheckController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<BotApiHealthCheckDto>> getBotApiHealthChecks(BotApiHealthCheckRequestDto healthCheckReq) {
+    public ResponseEntity<List<BotApiHealthCheckDto>> getBotApiHealthChecks(@RequestBody BotApiHealthCheckRequestDto healthCheckReq) {
         List<BotApiHealthCheck> healthChecks = botApiHealthCheckService
                 .getHealthChecksOfBotApiForPeriod(healthCheckReq.getBotApiId(), healthCheckReq.getPeriodMinutes());
         List<BotApiHealthCheckDto> healthCheckDtos = botApiHealthCheckDtoMapper.toDtos(healthChecks);
@@ -43,9 +45,9 @@ public class BotApiHealthCheckController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('BOT_API')")
-    public ResponseEntity<MessageDto> submitHealthCheck(BotApiSubmitHealthCheckDto submitHealthCheckDto) {
-        botApiHealthCheckService.submitHealthCheck(submitHealthCheckDto.getBotApiId(),
-                submitHealthCheckDto.getAccessKey());
+    public ResponseEntity<MessageDto> submitHealthCheck() {
+        BotApiInfo botApiInfo = AuthUtil.getCurrentBotApiInfo();
+        botApiHealthCheckService.submitHealthCheck(botApiInfo.getId());
         return ok(new MessageDto("Health check has been successfully submitted"));
     }
 

@@ -1,7 +1,6 @@
 package ua.ozzy.apiback.service;
 
 import org.springframework.stereotype.Service;
-import ua.ozzy.apiback.exception.ValidationException;
 import ua.ozzy.apiback.model.BotApiHealthCheck;
 import ua.ozzy.apiback.model.BotApiInfo;
 import ua.ozzy.apiback.repository.BotApiHealthCheckRepository;
@@ -39,13 +38,9 @@ public class BotApiHealthCheckServiceImpl implements BotApiHealthCheckService {
     }
 
     @Override
-    public void submitHealthCheck(String botApiId, String accessKey) {
-        validateNotNull(botApiId, "Please provide an id of a source bot api");
-        validateNotNull(accessKey, "Missing an access key");
+    public void submitHealthCheck(String botApiId) {
+        validateNotNull(botApiId, "Please provide an id of the source bot api");
         BotApiInfo botApiInfo = botApiInfoService.getBotApiInfoById(botApiId);
-        if (!botApiInfoService.isValidAccessKeyForBotApi(accessKey, botApiInfo)) {
-            throw new ValidationException("Invalid access key");
-        }
         BotApiHealthCheck healthCheck = BotApiHealthCheck.forBotApi(botApiInfo);
         botApiHealthCheckRepository.save(healthCheck);
     }

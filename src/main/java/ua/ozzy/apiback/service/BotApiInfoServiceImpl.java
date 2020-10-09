@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ua.ozzy.apiback.exception.ValidationException;
 import ua.ozzy.apiback.model.BotApiInfo;
 import ua.ozzy.apiback.repository.BotApiInfoRepository;
-import ua.ozzy.apiback.util.CryptoUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,12 +43,6 @@ public class BotApiInfoServiceImpl implements BotApiInfoService {
     public Optional<BotApiInfo> getBotApiInfoByAccessKeyHash(String accessKeyHash) {
         validateNotNull(accessKeyHash, "Access key should not be null");
         return botApiInfoRepository.findByAccessKeyHash(accessKeyHash);
-    }
-
-    @Override
-    public boolean isValidAccessKeyForBotApi(String accessKey, BotApiInfo botApiInfo) {
-        String accessKeyHashed = CryptoUtil.hashStr(accessKey);
-        return botApiInfo.getAccessKeyHash().equals(accessKeyHashed);
     }
 
 }

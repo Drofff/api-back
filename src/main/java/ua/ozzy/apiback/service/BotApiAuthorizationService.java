@@ -1,8 +1,8 @@
 package ua.ozzy.apiback.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.ozzy.apiback.model.SystemUser;
-import ua.ozzy.apiback.util.CryptoUtil;
 
 import java.util.Optional;
 
@@ -12,9 +12,11 @@ public class BotApiAuthorizationService implements AuthorizationService {
     private static final String SCHEME = "AccessKey";
 
     private final BotApiInfoService botApiInfoService;
+    private final PasswordEncoder passwordEncoder;
 
-    public BotApiAuthorizationService(BotApiInfoService botApiInfoService) {
+    public BotApiAuthorizationService(BotApiInfoService botApiInfoService, PasswordEncoder passwordEncoder) {
         this.botApiInfoService = botApiInfoService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class BotApiAuthorizationService implements AuthorizationService {
 
     @Override
     public Optional<SystemUser> getTokenOwner(String authorizationToken) {
-        String accessKeyHashed = CryptoUtil.hashStr(authorizationToken);
+        String accessKeyHashed = passwordEncoder.encode(authorizationToken);
         return botApiInfoService.getBotApiInfoByAccessKeyHash(accessKeyHashed).map(botApi -> botApi);
     }
 

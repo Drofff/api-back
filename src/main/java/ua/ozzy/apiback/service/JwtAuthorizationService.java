@@ -92,12 +92,12 @@ public class JwtAuthorizationService implements AuthorizationService {
 
     private Date nextExpiresAt() {
         GregorianCalendar gregCalendar = new GregorianCalendar();
-        gregCalendar.add(Calendar.DAY_OF_YEAR, jwtProperties.timeToLiveDays);
+        gregCalendar.add(Calendar.DAY_OF_YEAR, jwtProperties.getTimeToLiveDays());
         return gregCalendar.getTime();
     }
 
     private Algorithm signatureAlgorithm() {
-        return Algorithm.HMAC512(jwtProperties.secret);
+        return Algorithm.HMAC512(jwtProperties.getSecret());
     }
 
 }

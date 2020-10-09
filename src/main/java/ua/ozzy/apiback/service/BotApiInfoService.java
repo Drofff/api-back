@@ -12,6 +12,4 @@ public interface BotApiInfoService {
 
     Optional<BotApiInfo> getBotApiInfoByAccessKeyHash(String accessKeyHash);
 
-    boolean isValidAccessKeyForBotApi(String accessKey, BotApiInfo botApiInfo);
-
 }

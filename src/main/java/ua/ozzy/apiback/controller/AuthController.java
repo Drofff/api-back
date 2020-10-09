@@ -2,6 +2,7 @@ package ua.ozzy.apiback.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.ozzy.apiback.dto.AuthenticationDto;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthorizationDto> authenticate(AuthenticationDto authDto) {
+    public ResponseEntity<AuthorizationDto> authenticate(@RequestBody AuthenticationDto authDto) {
         SystemUser sysUser = authenticationService.authenticate(authDto.getUsername(), authDto.getPassword());
         String authzToken = authorizationService.getTokenForUser(sysUser);
         return ok(new AuthorizationDto(authzToken));
