@@ -38,4 +38,8 @@ public abstract class DtoMapper<E, D> {
         return modelMapper.map(dto, entityType);
     }
 
+    protected final ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
 }
