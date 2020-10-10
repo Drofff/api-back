@@ -11,6 +11,8 @@ public class Status {
 
     private String name;
 
+    private Boolean isDefault;
+
     public String getId() {
         return id;
     }
@@ -25,6 +27,14 @@ public class Status {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
     }
 
 }

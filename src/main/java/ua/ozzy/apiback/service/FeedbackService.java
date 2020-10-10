@@ -12,4 +12,12 @@ public interface FeedbackService {
 
     Optional<Feedback> getLatestFeedback();
 
+    void createFeedback(Feedback feedback);
+
+    void updateFeedbackForRequester(Feedback feedback, String requesterId);
+
+    Feedback getFeedbackById(String id);
+
+    void updateFeedback(Feedback feedback);
+
 }

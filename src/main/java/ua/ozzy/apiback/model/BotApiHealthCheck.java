@@ -1,11 +1,12 @@
 package ua.ozzy.apiback.model;
 
+import ua.ozzy.apiback.util.DbUtil;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 public class BotApiHealthCheck {
@@ -20,7 +21,7 @@ public class BotApiHealthCheck {
     private BotApiInfo botApiInfo;
 
     public static BotApiHealthCheck forBotApi(BotApiInfo botApiInfo) {
-        String generatedId = UUID.randomUUID().toString();
+        String generatedId = DbUtil.generateId();
         LocalDateTime timeOfCheck = LocalDateTime.now();
         return new BotApiHealthCheck(generatedId, timeOfCheck, botApiInfo);
     }

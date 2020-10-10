@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,8 +16,11 @@ public class Feedback {
     @Id
     private String id;
 
+    @NotNull(message = "Rate is required")
+    @Min(1) @Max(5)
     private Short rate;
 
+    @NotBlank(message = "Comment should be provided")
     private String comment;
 
     @ManyToOne
@@ -22,6 +29,7 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @NotNull(message = "Feedback should contain customer's info")
     private Customer customer;
 
     @ManyToOne
@@ -84,6 +92,10 @@ public class Feedback {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public boolean canBeModifiedBy(String telegramUserId) {
+        return assignedUser == null || assignedUser.getId().equals(telegramUserId);
     }
 
 }
