@@ -3,6 +3,7 @@ package ua.ozzy.apiback.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ua.ozzy.apiback.encoder.Sha512PasswordEncoder;
 import ua.ozzy.apiback.filter.AuthorizationFilter;
 import ua.ozzy.apiback.repository.AdminRepository;
@@ -36,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().and()
+        http.cors().and()
                 .authorizeRequests()
                 .anyRequest()
                 .permitAll()
@@ -77,6 +81,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new Sha512PasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource corsConfigSrc = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfig = new CorsConfiguration().applyPermitDefaultValues();
+        List<String> allowedHttpMethods = List.of(HttpMethod.GET.name(), HttpMethod.POST.name(),
+                HttpMethod.PUT.name(), HttpMethod.DELETE.name());
+        corsConfig.setAllowedMethods(allowedHttpMethods);
+        corsConfigSrc.registerCorsConfiguration("/**", corsConfig);
+        return corsConfigSrc;
     }
 
 }
