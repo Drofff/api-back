@@ -12,4 +12,10 @@ public interface BotApiInfoService {
 
     Optional<BotApiInfo> getBotApiInfoByAccessKeyHash(String accessKeyHash);
 
+    String generateAccessKeyForBotApi(BotApiInfo botApiInfo);
+
+    BotApiInfo createDefaultBotApiInfo();
+
+    void updateBotApiInfo(BotApiInfo botApiInfo);
+
 }

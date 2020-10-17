@@ -21,7 +21,8 @@ public class BotApiInfoDtoMapper extends DtoMapper<BotApiInfo, BotApiInfoDto> {
     }
 
     private ExpressionMap<BotApiInfo, BotApiInfoDto> activeGroupMapping() {
-        return context -> context.using(telegramGroupIdExtractor())
+        return context -> context.when(mc -> mc.getSource() != null)
+                .using(telegramGroupIdExtractor())
                 .map(BotApiInfo::getActiveGroup, BotApiInfoDto::setActiveGroup);
     }
 

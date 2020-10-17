@@ -1,9 +1,13 @@
 package ua.ozzy.apiback.model;
 
+import org.hibernate.validator.constraints.URL;
 import ua.ozzy.apiback.enums.ApiStatus;
 import ua.ozzy.apiback.enums.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.EnumType.STRING;
 
@@ -16,12 +20,16 @@ public class BotApiInfo extends SystemUser {
     @Enumerated(STRING)
     private ApiStatus status;
 
-    private String accessKeyHash;
+    @OneToMany
+    @JoinColumn(name = "bot_api_id")
+    private List<AccessKey> accessKeys = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "active_group_id")
     private TelegramGroup activeGroup;
 
+    @NotBlank(message = "Bot url is required")
+    @URL(message = "Invalid URL format")
     private String botUrl;
 
     public String getId() {
@@ -40,12 +48,12 @@ public class BotApiInfo extends SystemUser {
         this.status = status;
     }
 
-    public String getAccessKeyHash() {
-        return accessKeyHash;
+    public List<AccessKey> getAccessKeys() {
+        return accessKeys;
     }
 
-    public void setAccessKeyHash(String accessKeyHash) {
-        this.accessKeyHash = accessKeyHash;
+    public void setAccessKeys(List<AccessKey> accessKeys) {
+        this.accessKeys = accessKeys;
     }
 
     public TelegramGroup getActiveGroup() {
@@ -71,7 +79,10 @@ public class BotApiInfo extends SystemUser {
 
     @Override
     public String getPassword() {
-        return accessKeyHash;
+        if (accessKeys.isEmpty()) {
+            return "<unknown>";
+        }
+        return accessKeys.get(0).getKeyHash();
     }
 
     @Override
