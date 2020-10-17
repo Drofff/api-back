@@ -5,7 +5,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.ozzy.apiback.dto.BotApiHealthCheckDto;
 import ua.ozzy.apiback.dto.BotApiHealthCheckRequestDto;
@@ -36,7 +35,7 @@ public class BotApiHealthCheckController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<BotApiHealthCheckDto>> getBotApiHealthChecks(@RequestBody BotApiHealthCheckRequestDto healthCheckReq) {
+    public ResponseEntity<List<BotApiHealthCheckDto>> getBotApiHealthChecks(BotApiHealthCheckRequestDto healthCheckReq) {
         List<BotApiHealthCheck> healthChecks = botApiHealthCheckService
                 .getHealthChecksOfBotApiForPeriod(healthCheckReq.getBotApiId(), healthCheckReq.getPeriodMinutes());
         List<BotApiHealthCheckDto> healthCheckDtos = botApiHealthCheckDtoMapper.toDtos(healthChecks);
