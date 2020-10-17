@@ -13,7 +13,7 @@ import static java.util.Collections.singleton;
 public abstract class SystemUser implements UserDetails {
 
     public Authentication toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(this, getPassword());
+        return new UsernamePasswordAuthenticationToken(this, getPassword(), getAuthorities());
     }
 
     @Override

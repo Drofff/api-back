@@ -53,7 +53,8 @@ public class AuthorizationFilter implements Filter {
     private SystemUser findOwnerOfToken(String token) {
         String scheme = TokenSchemeUtil.getSchemeOfToken(token);
         AuthorizationService authzService = findAuthorizationServiceForScheme(scheme);
-        return authzService.getTokenOwner(token)
+        String tokenWithoutScheme = TokenSchemeUtil.removeSchemeFromToken(token);
+        return authzService.getTokenOwner(tokenWithoutScheme)
                 .orElseThrow(() -> new AuthorizationException("Invalid authorization token"));
     }
 
