@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private List<AuthorizationService> authzServices;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private AuthenticationProvider authenticationProvider;
 
 
     @Override
@@ -61,11 +61,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
+        auth.authenticationProvider(authenticationProvider);
     }
 
     @Bean
-    AuthenticationProvider authenticationProvider() {
+    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthProvider = new DaoAuthenticationProvider();
         daoAuthProvider.setUserDetailsService(userDetailsService);
         daoAuthProvider.setPasswordEncoder(passwordEncoder());

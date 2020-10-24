@@ -21,13 +21,15 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     private final CustomerService customerService;
     private final StatusService statusService;
+    private final BotApiUpdateService botApiUpdateService;
 
     private final FeedbackRepository feedbackRepository;
 
     public FeedbackServiceImpl(CustomerService customerService, StatusService statusService,
-                               FeedbackRepository feedbackRepository) {
+                               BotApiUpdateService botApiUpdateService, FeedbackRepository feedbackRepository) {
         this.customerService = customerService;
         this.statusService = statusService;
+        this.botApiUpdateService = botApiUpdateService;
         this.feedbackRepository = feedbackRepository;
     }
 
@@ -76,6 +78,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         validate(feedback, "Can not update a null feedback");
         validateNotNull(feedback.getId(), "Missing feedback id");
         feedbackRepository.save(feedback);
+        botApiUpdateService.sendFeedbackUpdate(feedback);
     }
 
 }

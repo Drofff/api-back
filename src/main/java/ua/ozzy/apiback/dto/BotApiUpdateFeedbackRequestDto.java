@@ -1,21 +1,19 @@
 package ua.ozzy.apiback.dto;
 
-import ua.ozzy.apiback.model.Status;
-
 public class BotApiUpdateFeedbackRequestDto {
 
-    private Status status;
+    private String statusId;
 
     private UpdateFeedbackRequestTelegramUserDto assignedUser;
 
     private String requesterId;
 
-    public Status getStatus() {
-        return status;
+    public String getStatusId() {
+        return statusId;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
 
     public UpdateFeedbackRequestTelegramUserDto getAssignedUser() {

@@ -8,6 +8,8 @@ import ua.ozzy.apiback.model.SystemUser;
 
 public class AuthUtil {
 
+    private AuthUtil() {}
+
     public static Admin getCurrentAdmin() {
         return getCurrentSystemUser(Admin.class);
     }

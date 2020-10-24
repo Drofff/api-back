@@ -1,10 +1,15 @@
 package ua.ozzy.apiback.dto;
 
-public class AdminUpdateFeedbackRequestDto {
+public class UpdateFeedbackInBotApiDto {
 
-    private String statusId;
+    String statusId;
 
-    private String assignedUserId;
+    String assignedUserId;
+
+    public UpdateFeedbackInBotApiDto(String statusId, String assignedUserId) {
+        this.statusId = statusId;
+        this.assignedUserId = assignedUserId;
+    }
 
     public String getStatusId() {
         return statusId;

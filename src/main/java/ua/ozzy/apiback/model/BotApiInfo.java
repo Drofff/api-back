@@ -74,7 +74,7 @@ public class BotApiInfo extends SystemUser {
 
     @Override
     public String getUsername() {
-        return id;
+        return getId();
     }
 
     @Override

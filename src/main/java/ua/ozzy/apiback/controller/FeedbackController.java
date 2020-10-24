@@ -10,8 +10,10 @@ import ua.ozzy.apiback.mapper.CreateFeedbackRequestDtoMapper;
 import ua.ozzy.apiback.mapper.FeedbackDtoMapper;
 import ua.ozzy.apiback.mapper.UpdateFeedbackRequestTelegramUserDtoMapper;
 import ua.ozzy.apiback.model.Feedback;
+import ua.ozzy.apiback.model.Status;
 import ua.ozzy.apiback.model.TelegramUser;
 import ua.ozzy.apiback.service.FeedbackService;
+import ua.ozzy.apiback.service.StatusService;
 import ua.ozzy.apiback.service.TelegramUserService;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -21,16 +23,18 @@ import static org.springframework.http.ResponseEntity.ok;
 public class FeedbackController {
 
     private final FeedbackService feedbackService;
+    private final StatusService statusService;
     private final TelegramUserService telegramUserService;
 
     private final FeedbackDtoMapper feedbackDtoMapper;
     private final CreateFeedbackRequestDtoMapper createFeedbackRequestDtoMapper;
     private final UpdateFeedbackRequestTelegramUserDtoMapper updateFeedbackRequestTelegramUserDtoMapper;
 
-    public FeedbackController(FeedbackService feedbackService, TelegramUserService telegramUserService,
+    public FeedbackController(FeedbackService feedbackService, StatusService statusService, TelegramUserService telegramUserService,
                               FeedbackDtoMapper feedbackDtoMapper, CreateFeedbackRequestDtoMapper createFeedbackRequestDtoMapper,
                               UpdateFeedbackRequestTelegramUserDtoMapper updateFeedbackRequestTelegramUserDtoMapper) {
         this.feedbackService = feedbackService;
+        this.statusService = statusService;
         this.telegramUserService = telegramUserService;
         this.feedbackDtoMapper = feedbackDtoMapper;
         this.createFeedbackRequestDtoMapper = createFeedbackRequestDtoMapper;
@@ -56,13 +60,18 @@ public class FeedbackController {
     @PutMapping("/{id}-as-bot-api")
     @PreAuthorize("hasAuthority('BOT_API')")
     public ResponseEntity<MessageDto> updateFeedbackAsBotApi(@PathVariable String id,
-                                                             @RequestBody BotApiUpdateFeedbackRequestDto reqDto) {
+                                                             @RequestBody BotApiUpdateFeedbackRequestDto updateDto) {
         Feedback feedback = feedbackService.getFeedbackById(id);
-        feedback.setStatus(reqDto.getStatus());
-        TelegramUser assignedUser = asTelegramUser(reqDto.getAssignedUser());
-        feedback.setAssignedUser(assignedUser);
-        feedbackService.updateFeedbackForRequester(feedback, reqDto.getRequesterId());
+        applyFeedbackUpdate(feedback, updateDto);
+        feedbackService.updateFeedbackForRequester(feedback, updateDto.getRequesterId());
         return ok(new MessageDto("Feedback has been successfully updated"));
+    }
+
+    private void applyFeedbackUpdate(Feedback feedback, BotApiUpdateFeedbackRequestDto update) {
+        Status status = statusService.getStatusById(update.getStatusId());
+        feedback.setStatus(status);
+        TelegramUser assignedUser = asTelegramUser(update.getAssignedUser());
+        feedback.setAssignedUser(assignedUser);
     }
 
     private TelegramUser asTelegramUser(UpdateFeedbackRequestTelegramUserDto telUsrDto) {
@@ -73,14 +82,19 @@ public class FeedbackController {
     @PutMapping("/{id}-as-admin")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MessageDto> updateFeedbackAsAdmin(@PathVariable String id,
-                                                            @RequestBody AdminUpdateFeedbackRequestDto reqDto) {
+                                                            @RequestBody AdminUpdateFeedbackRequestDto updateDto) {
         Feedback feedback = feedbackService.getFeedbackById(id);
-        feedback.setStatus(reqDto.getStatus());
-        String assignedUserId = reqDto.getAssignedUserId();
-        TelegramUser assignedUser = telegramUserService.getTelegramUserById(assignedUserId);
-        feedback.setAssignedUser(assignedUser);
+        applyFeedbackUpdate(feedback, updateDto);
         feedbackService.updateFeedback(feedback);
         return ok(new MessageDto("Feedback has been successfully updated"));
+    }
+
+    private void applyFeedbackUpdate(Feedback feedback, AdminUpdateFeedbackRequestDto update) {
+        Status status = statusService.getStatusById(update.getStatusId());
+        feedback.setStatus(status);
+        String assignedUserId = update.getAssignedUserId();
+        TelegramUser assignedUser = telegramUserService.getTelegramUserById(assignedUserId);
+        feedback.setAssignedUser(assignedUser);
     }
 
 }

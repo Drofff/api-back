@@ -10,4 +10,6 @@ public interface StatusService {
 
     List<Status> getStatuses();
 
+    Status getStatusById(String id);
+
 }
