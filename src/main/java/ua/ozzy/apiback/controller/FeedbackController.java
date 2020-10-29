@@ -1,5 +1,8 @@
 package ua.ozzy.apiback.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +46,11 @@ public class FeedbackController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Page<FeedbackDto>> getFeedbacks(Pageable pageable) {
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "page", value = "Number of the desired page starting from 0", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "Size of the response page", paramType = "query")
+    })
+    public ResponseEntity<Page<FeedbackDto>> getFeedbacks(@ApiParam(hidden = true) Pageable pageable) {
         Page<Feedback> feedbacks = feedbackService.getFeedbacks(pageable);
         Page<FeedbackDto> feedbackDtos = feedbacks.map(feedbackDtoMapper::toDto);
         return ok(feedbackDtos);
