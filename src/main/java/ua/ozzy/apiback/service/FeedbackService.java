@@ -14,10 +14,10 @@ public interface FeedbackService {
 
     void createFeedback(Feedback feedback);
 
-    void updateFeedbackForRequester(Feedback feedback, String requesterId);
+    Feedback updateFeedbackForRequester(Feedback feedback, String requesterId);
 
     Feedback getFeedbackById(String id);
 
-    void updateFeedback(Feedback feedback);
+    Feedback updateFeedback(Feedback feedback);
 
 }

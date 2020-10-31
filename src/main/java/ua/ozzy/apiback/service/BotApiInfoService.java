@@ -1,10 +1,13 @@
 package ua.ozzy.apiback.service;
 
 import ua.ozzy.apiback.model.BotApiInfo;
+import ua.ozzy.apiback.model.TelegramGroup;
 
 import java.util.Optional;
 
 public interface BotApiInfoService {
+
+    TelegramGroup getActiveTelegramGroup();
 
     BotApiInfo getFirstBotApiInfo();
 

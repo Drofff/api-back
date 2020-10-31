@@ -57,13 +57,13 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void updateFeedbackForRequester(Feedback feedback, String requesterId) {
+    public Feedback updateFeedbackForRequester(Feedback feedback, String requesterId) {
         validateNotNull(feedback, "Feedback is null");
         Feedback originalFeedback = getFeedbackById(feedback.getId());
         if (!originalFeedback.canBeModifiedBy(requesterId)) {
             throw new ValidationException("Permission denied for user with id " + requesterId);
         }
-        updateFeedback(feedback);
+        return updateFeedback(feedback);
     }
 
     @Override
@@ -74,11 +74,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void updateFeedback(Feedback feedback) {
+    public Feedback updateFeedback(Feedback feedback) {
         validate(feedback, "Can not update a null feedback");
         validateNotNull(feedback.getId(), "Missing feedback id");
-        feedbackRepository.save(feedback);
+        Feedback savedFeedback = feedbackRepository.save(feedback);
         botApiUpdateService.sendFeedbackUpdate(feedback);
+        return savedFeedback;
     }
 
 }

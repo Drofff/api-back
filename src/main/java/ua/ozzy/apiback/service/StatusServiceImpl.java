@@ -1,6 +1,7 @@
 package ua.ozzy.apiback.service;
 
 import org.springframework.stereotype.Service;
+import ua.ozzy.apiback.dto.FindStatusDto;
 import ua.ozzy.apiback.exception.ApiBackException;
 import ua.ozzy.apiback.exception.ValidationException;
 import ua.ozzy.apiback.model.Status;
@@ -35,6 +36,12 @@ public class StatusServiceImpl implements StatusService {
         validateNotNull(id, "Status id must not be null");
         return statusRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("Status with id '" + id + "' doesn't exist"));
+    }
+
+    @Override
+    public List<Status> findStatuses(FindStatusDto findStatusDto) {
+        validateNotNull(findStatusDto, "Status search criteria is null");
+        return statusRepository.findBy(findStatusDto);
     }
 
 }

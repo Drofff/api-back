@@ -66,12 +66,12 @@ public class FeedbackController {
 
     @PutMapping("/{id}-as-bot-api")
     @PreAuthorize("hasAuthority('BOT_API')")
-    public ResponseEntity<MessageDto> updateFeedbackAsBotApi(@PathVariable String id,
+    public ResponseEntity<FeedbackDto> updateFeedbackAsBotApi(@PathVariable String id,
                                                              @RequestBody BotApiUpdateFeedbackRequestDto updateDto) {
         Feedback feedback = feedbackService.getFeedbackById(id);
         applyFeedbackUpdate(feedback, updateDto);
-        feedbackService.updateFeedbackForRequester(feedback, updateDto.getRequesterId());
-        return ok(new MessageDto("Feedback has been successfully updated"));
+        Feedback updatedFeedback = feedbackService.updateFeedbackForRequester(feedback, updateDto.getRequesterId());
+        return ok(feedbackDtoMapper.toDto(updatedFeedback));
     }
 
     private void applyFeedbackUpdate(Feedback feedback, BotApiUpdateFeedbackRequestDto update) {

@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ua.ozzy.apiback.enums.ApiStatus;
+import ua.ozzy.apiback.exception.ConfigNotSetException;
 import ua.ozzy.apiback.exception.ValidationException;
 import ua.ozzy.apiback.model.AccessKey;
 import ua.ozzy.apiback.model.BotApiInfo;
+import ua.ozzy.apiback.model.TelegramGroup;
 import ua.ozzy.apiback.repository.BotApiInfoRepository;
 import ua.ozzy.apiback.util.DbUtil;
 
@@ -28,6 +30,14 @@ public class BotApiInfoServiceImpl implements BotApiInfoService {
     public BotApiInfoServiceImpl(BotApiInfoRepository botApiInfoRepository, AccessKeyService accessKeyService) {
         this.botApiInfoRepository = botApiInfoRepository;
         this.accessKeyService = accessKeyService;
+    }
+
+    @Override
+    public TelegramGroup getActiveTelegramGroup() {
+        BotApiInfo botApiInfo = getFirstBotApiInfo();
+        TelegramGroup activeTG = botApiInfo.getActiveGroup();
+        return Optional.ofNullable(activeTG)
+                .orElseThrow(() -> new ConfigNotSetException("Active telegram group is not currently configured"));
     }
 
     @Override

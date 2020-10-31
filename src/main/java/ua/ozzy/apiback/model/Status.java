@@ -13,6 +13,14 @@ public class Status {
 
     private Boolean isDefault;
 
+    public Status() {}
+
+    public Status(String id, String name, Boolean isDefault) {
+        this.id = id;
+        this.name = name;
+        this.isDefault = isDefault;
+    }
+
     public String getId() {
         return id;
     }

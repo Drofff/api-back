@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.ozzy.apiback.dto.*;
 import ua.ozzy.apiback.mapper.BotApiInfoDtoMapper;
+import ua.ozzy.apiback.mapper.ViewTelegramGroupDtoMapper;
 import ua.ozzy.apiback.model.BotApiInfo;
 import ua.ozzy.apiback.model.Feedback;
 import ua.ozzy.apiback.model.TelegramGroup;
@@ -24,13 +25,16 @@ public class BotApiInfoController {
     private final TelegramGroupService telegramGroupService;
 
     private final BotApiInfoDtoMapper botApiInfoDtoMapper;
+    private final ViewTelegramGroupDtoMapper viewTelegramGroupDtoMapper;
 
     public BotApiInfoController(BotApiInfoService botApiInfoService, FeedbackService feedbackService,
-                                TelegramGroupService telegramGroupService, BotApiInfoDtoMapper botApiInfoDtoMapper) {
+                                TelegramGroupService telegramGroupService, BotApiInfoDtoMapper botApiInfoDtoMapper,
+                                ViewTelegramGroupDtoMapper viewTelegramGroupDtoMapper) {
         this.botApiInfoService = botApiInfoService;
         this.feedbackService = feedbackService;
         this.telegramGroupService = telegramGroupService;
         this.botApiInfoDtoMapper = botApiInfoDtoMapper;
+        this.viewTelegramGroupDtoMapper = viewTelegramGroupDtoMapper;
     }
 
     @GetMapping("/info")
@@ -69,6 +73,14 @@ public class BotApiInfoController {
         BotApiInfo botApiInfo = botApiInfoService.getBotApiInfoById(id);
         String accessKey = botApiInfoService.generateAccessKeyForBotApi(botApiInfo);
         return ok(new AccessKeyDto(accessKey));
+    }
+
+    @GetMapping("/active-group")
+    @PreAuthorize("hasAnyAuthority('BOT_API', 'ADMIN')")
+    public ResponseEntity<ViewTelegramGroupDto> getActiveTelegramGroup() {
+        TelegramGroup activeTG = botApiInfoService.getActiveTelegramGroup();
+        ViewTelegramGroupDto viewTelegramGroupDto = viewTelegramGroupDtoMapper.toDto(activeTG);
+        return ok(viewTelegramGroupDto);
     }
 
 }
