@@ -41,7 +41,7 @@ public class TelegramGroupController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('BOT_API', 'ADMIN')")
     public ResponseEntity<MessageDto> createTelegramGroup(@RequestBody CreateTelegramGroupDto createTelegramGroupDto) {
         TelegramGroup tg = createTelegramGroupDtoMapper.toEntity(createTelegramGroupDto);
         telegramGroupService.createTelegramGroup(tg);
