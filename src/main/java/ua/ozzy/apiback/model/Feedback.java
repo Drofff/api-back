@@ -78,10 +78,6 @@ public class Feedback {
         this.customer = customer;
     }
 
-    public String getAssignedUserId() {
-        return assignedUser != null ? assignedUser.getId() : null;
-    }
-
     public TelegramUser getAssignedUser() {
         return assignedUser;
     }

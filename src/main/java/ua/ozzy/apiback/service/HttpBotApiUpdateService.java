@@ -8,6 +8,7 @@ import ua.ozzy.apiback.dto.UpdateFeedbackInBotApiDto;
 import ua.ozzy.apiback.exception.ApiBackException;
 import ua.ozzy.apiback.model.Feedback;
 import ua.ozzy.apiback.model.Status;
+import ua.ozzy.apiback.model.TelegramUser;
 
 import java.util.Map;
 
@@ -38,7 +39,8 @@ public class HttpBotApiUpdateService implements BotApiUpdateService {
 
     private UpdateFeedbackInBotApiDto asDto(Feedback feedback) {
         Status status = feedback.getStatus();
-        return new UpdateFeedbackInBotApiDto(status.getId(), feedback.getAssignedUserId());
+        TelegramUser assignedUser = feedback.getAssignedUser();
+        return new UpdateFeedbackInBotApiDto(status.getId(), assignedUser.getId());
     }
 
 }
