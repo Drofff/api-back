@@ -12,7 +12,7 @@ public interface FeedbackService {
 
     Optional<Feedback> getLatestFeedback();
 
-    void createFeedback(Feedback feedback);
+    Feedback createFeedback(Feedback feedback);
 
     Feedback updateFeedbackForRequester(Feedback feedback, String requesterId);
 

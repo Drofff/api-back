@@ -58,10 +58,10 @@ public class FeedbackController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('BOT_API')")
-    public ResponseEntity<MessageDto> createFeedback(@RequestBody CreateFeedbackRequestDto createFbReqDto) {
+    public ResponseEntity<FeedbackDto> createFeedback(@RequestBody CreateFeedbackRequestDto createFbReqDto) {
         Feedback feedback = createFeedbackRequestDtoMapper.toEntity(createFbReqDto);
-        feedbackService.createFeedback(feedback);
-        return ok(new MessageDto("Feedback has been successfully saved"));
+        Feedback savedFeedback = feedbackService.createFeedback(feedback);
+        return ok(feedbackDtoMapper.toDto(savedFeedback));
     }
 
     @PutMapping("/{id}-as-bot-api")

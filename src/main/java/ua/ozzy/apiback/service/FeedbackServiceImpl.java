@@ -45,7 +45,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void createFeedback(Feedback feedback) {
+    public Feedback createFeedback(Feedback feedback) {
         validate(feedback, "Feedback should not be null");
         Customer customer = customerService.findOrCreateCustomer(feedback.getCustomer());
         feedback.setCustomer(customer);
@@ -53,7 +53,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         Status defaultStatus = statusService.getDefaultStatus();
         feedback.setStatus(defaultStatus);
         feedback.setDateTime(LocalDateTime.now());
-        feedbackRepository.save(feedback);
+        return feedbackRepository.save(feedback);
     }
 
     @Override
