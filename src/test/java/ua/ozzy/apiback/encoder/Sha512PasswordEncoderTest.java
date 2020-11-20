@@ -7,10 +7,10 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Sha512PasswordEncoderTest {
+class Sha512PasswordEncoderTest {
 
     @Test
-    public void encodeAndMatchPasswordTest() {
+    void encodeAndMatchPasswordTest() {
         String testPassword = "pass";
         PasswordEncoder pe = new Sha512PasswordEncoder();
         String encodedPassword = pe.encode(testPassword);
@@ -20,7 +20,7 @@ public class Sha512PasswordEncoderTest {
     }
 
     @Test
-    public void hashIsConsistentTest() {
+    void hashIsConsistentTest() {
         String testPassword = "pass";
         PasswordEncoder pe = new Sha512PasswordEncoder();
         long distinctHashesCount = IntStream.range(0, 4)

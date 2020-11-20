@@ -7,11 +7,17 @@ import java.util.List;
 
 public interface StatusService {
 
+    void createStatus(Status status);
+
+    void updateStatus(Status status);
+
+    Status getStatusById(String id);
+
+    void deleteStatus(Status status);
+
     Status getDefaultStatus();
 
     List<Status> getStatuses();
-
-    Status getStatusById(String id);
 
     List<Status> findStatuses(FindStatusDto findStatusDto);
 

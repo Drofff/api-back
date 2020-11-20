@@ -1,7 +1,10 @@
 package ua.ozzy.apiback.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Status {
@@ -9,6 +12,8 @@ public class Status {
     @Id
     private String id;
 
+    @NotBlank(message = "Name must not be blank")
+    @Length(max = 30, message = "Max status name length is 30 symbols")
     private String name;
 
     private Boolean isDefault;
