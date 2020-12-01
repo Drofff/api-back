@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface BotApiInfoRepository extends JpaRepository<BotApiInfo, String> {
 
-    @Query("from BotApiInfo i join i.accessKeys keys where keys.keyHash = :accessKeyHash")
+    @Query("select apiInfo from BotApiInfo apiInfo join apiInfo.accessKeys keys where keys.keyHash = :accessKeyHash")
     Optional<BotApiInfo> findByAccessKeyHash(String accessKeyHash);
 
 }

@@ -20,7 +20,7 @@ public class BotApiInfo extends SystemUser {
     @Enumerated(STRING)
     private ApiStatus status;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "bot_api_id")
     private List<AccessKey> accessKeys = new ArrayList<>();
 

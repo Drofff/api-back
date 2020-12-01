@@ -14,10 +14,27 @@ public interface FeedbackService {
 
     Feedback createFeedback(Feedback feedback);
 
+    /**
+     * This method should be used to update a feedback by
+     * Bot API's request. It assumes Bot API is completely
+     * aware of the change. The method validates requester
+     * permissions to update the feedback.
+     *
+     * @param feedback - entity to update
+     * @param requesterId - telegram user id of the update requester
+     * @return updated feedback
+     */
     Feedback updateFeedbackForRequester(Feedback feedback, String requesterId);
 
     Feedback getFeedbackById(String id);
 
-    Feedback updateFeedback(Feedback feedback);
+    /**
+     * Updates the feedback without any permissions check
+     * and notifies Bot API about the change. Intended to
+     * be used for admin users only.
+     *
+     * @param feedback - entity to update
+     */
+    void updateFeedback(Feedback feedback);
 
 }
