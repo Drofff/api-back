@@ -62,7 +62,9 @@ public class JwtAuthorizationService implements AuthorizationService {
     private Admin asAdmin(DecodedJWT decodedJWT) {
         String id = decodedJWT.getId();
         String username = decodedJWT.getClaim(USERNAME_CLAIM).asString();
-        return new Admin(id, username);
+        return new Admin.Builder().id(id)
+                .username(username)
+                .build();
     }
 
     @Override

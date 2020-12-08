@@ -1,6 +1,6 @@
 package ua.ozzy.apiback.dto;
 
-public class BotApiUpdateFeedbackRequestDto {
+public class BotApiUpdateFeedbackRequestDto implements UpdateFeedbackRequest {
 
     private String statusId;
 
@@ -22,6 +22,11 @@ public class BotApiUpdateFeedbackRequestDto {
 
     public void setAssignedUser(UpdateFeedbackRequestTelegramUserDto assignedUser) {
         this.assignedUser = assignedUser;
+    }
+
+    @Override
+    public boolean hasAssignedUser() {
+        return assignedUser != null;
     }
 
     public String getRequesterId() {

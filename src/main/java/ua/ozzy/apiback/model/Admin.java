@@ -15,13 +15,6 @@ public class Admin extends SystemUser {
 
     private String password;
 
-    public Admin() {}
-
-    public Admin(String id, String username) {
-        this.id = id;
-        this.username = username;
-    }
-
     public String getId() {
         return id;
     }
@@ -51,6 +44,31 @@ public class Admin extends SystemUser {
     @Override
     protected Role getRole() {
         return Role.ADMIN;
+    }
+
+    public static class Builder {
+
+        private final Admin admin = new Admin();
+
+        public Builder id(String id) {
+            admin.setId(id);
+            return this;
+        }
+
+        public Builder username(String username) {
+            admin.setUsername(username);
+            return this;
+        }
+
+        public Builder password(String password) {
+            admin.setPassword(password);
+            return this;
+        }
+
+        public Admin build() {
+            return admin;
+        }
+
     }
 
 }

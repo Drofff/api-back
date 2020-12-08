@@ -77,8 +77,10 @@ public class FeedbackController {
     private void applyFeedbackUpdate(Feedback feedback, BotApiUpdateFeedbackRequestDto update) {
         Status status = statusService.getStatusById(update.getStatusId());
         feedback.setStatus(status);
-        TelegramUser assignedUser = asTelegramUser(update.getAssignedUser());
-        feedback.setAssignedUser(assignedUser);
+        if (update.hasAssignedUser()) {
+            TelegramUser assignedUser = asTelegramUser(update.getAssignedUser());
+            feedback.setAssignedUser(assignedUser);
+        }
     }
 
     private TelegramUser asTelegramUser(UpdateFeedbackRequestTelegramUserDto telUsrDto) {
@@ -99,9 +101,11 @@ public class FeedbackController {
     private void applyFeedbackUpdate(Feedback feedback, AdminUpdateFeedbackRequestDto update) {
         Status status = statusService.getStatusById(update.getStatusId());
         feedback.setStatus(status);
-        String assignedUserId = update.getAssignedUserId();
-        TelegramUser assignedUser = telegramUserService.getTelegramUserById(assignedUserId);
-        feedback.setAssignedUser(assignedUser);
+        if (update.hasAssignedUser()) {
+            String assignedUserId = update.getAssignedUserId();
+            TelegramUser assignedUser = telegramUserService.getTelegramUserById(assignedUserId);
+            feedback.setAssignedUser(assignedUser);
+        }
     }
 
 }
