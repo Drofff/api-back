@@ -57,12 +57,6 @@ public class BotApiInfoServiceImpl implements BotApiInfoService {
     }
 
     @Override
-    public Optional<BotApiInfo> getBotApiInfoByAccessKeyHash(String accessKeyHash) {
-        validateNotNull(accessKeyHash, "Access key should not be null");
-        return botApiInfoRepository.findByAccessKeyHash(accessKeyHash);
-    }
-
-    @Override
     public String generateAccessKeyForBotApi(BotApiInfo botApiInfo) {
         validateNotNull(botApiInfo, "Can't generate an access key for the null Bot API");
         AccessKey accessKey = accessKeyService.generateAccessKey();
