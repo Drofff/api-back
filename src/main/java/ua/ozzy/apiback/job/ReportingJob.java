@@ -19,7 +19,7 @@ public class ReportingJob {
         this.botApiUpdateService = botApiUpdateService;
     }
 
-    @Scheduled(cron = "0 0 11 * * ?") // 11 AM every Monday
+    @Scheduled(cron = "0 0 11 * * MON")
     public void sendStatusReports() {
         List<StatusReport> statusReports = reportingService.getStatusReports();
         botApiUpdateService.sendStatusReports(statusReports);
