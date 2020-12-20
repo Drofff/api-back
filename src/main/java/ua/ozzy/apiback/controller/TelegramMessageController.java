@@ -1,6 +1,7 @@
 package ua.ozzy.apiback.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class TelegramMessageController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('BOT_API')")
     public ResponseEntity<TelegramMessageDto> getTelegramMessageOfFeedback(String feedbackId) {
         Feedback feedback = feedbackService.getFeedbackById(feedbackId);
         TelegramMessage tgMsg = telegramMessageService.getTelegramMessageOfFeedback(feedback);
@@ -40,6 +42,7 @@ public class TelegramMessageController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('BOT_API')")
     public ResponseEntity<MessageDto> createTelegramMessage(CreateTelegramMessageDto createTgMsgDto) {
         TelegramMessage tgMsg = asTelegramMessage(createTgMsgDto);
         telegramMessageService.createTelegramMessage(tgMsg);
