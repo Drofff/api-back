@@ -7,11 +7,13 @@ import ua.ozzy.apiback.exception.ValidationException;
 import ua.ozzy.apiback.model.Customer;
 import ua.ozzy.apiback.model.Feedback;
 import ua.ozzy.apiback.model.Status;
+import ua.ozzy.apiback.model.TelegramUser;
 import ua.ozzy.apiback.repository.FeedbackRepository;
 import ua.ozzy.apiback.util.DbUtil;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static ua.ozzy.apiback.util.ValidationUtil.validate;
@@ -38,9 +40,21 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public List<Feedback> getFeedbacks() {
+        return feedbackRepository.findAll();
+    }
+
+    @Override
     public Page<Feedback> getFeedbacks(Pageable pageable) {
         validateNotNull(pageable, "Missing paging info");
         return feedbackRepository.findByOrderByDateTimeDesc(pageable);
+    }
+
+    @Override
+    public List<Feedback> getFeedbacksAssignedTo(TelegramUser telegramUser) {
+        validateNotNull(telegramUser, "Telegram user must not be null");
+        validateNotNull(telegramUser.getId(), "Telegram user must obtain an id");
+        return feedbackRepository.findByAssignedUser(telegramUser);
     }
 
     @Override
