@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.ozzy.apiback.dto.*;
 import ua.ozzy.apiback.mapper.BotApiInfoDtoMapper;
 import ua.ozzy.apiback.mapper.ViewTelegramGroupDtoMapper;
+import ua.ozzy.apiback.model.AccessKey;
 import ua.ozzy.apiback.model.BotApiInfo;
 import ua.ozzy.apiback.model.Feedback;
 import ua.ozzy.apiback.model.TelegramGroup;
+import ua.ozzy.apiback.service.AccessKeyService;
 import ua.ozzy.apiback.service.BotApiInfoService;
 import ua.ozzy.apiback.service.FeedbackService;
 import ua.ozzy.apiback.service.TelegramGroupService;
@@ -23,16 +25,18 @@ public class BotApiInfoController {
     private final BotApiInfoService botApiInfoService;
     private final FeedbackService feedbackService;
     private final TelegramGroupService telegramGroupService;
+    private final AccessKeyService accessKeyService;
 
     private final BotApiInfoDtoMapper botApiInfoDtoMapper;
     private final ViewTelegramGroupDtoMapper viewTelegramGroupDtoMapper;
 
     public BotApiInfoController(BotApiInfoService botApiInfoService, FeedbackService feedbackService,
-                                TelegramGroupService telegramGroupService, BotApiInfoDtoMapper botApiInfoDtoMapper,
-                                ViewTelegramGroupDtoMapper viewTelegramGroupDtoMapper) {
+                                TelegramGroupService telegramGroupService, AccessKeyService accessKeyService,
+                                BotApiInfoDtoMapper botApiInfoDtoMapper, ViewTelegramGroupDtoMapper viewTelegramGroupDtoMapper) {
         this.botApiInfoService = botApiInfoService;
         this.feedbackService = feedbackService;
         this.telegramGroupService = telegramGroupService;
+        this.accessKeyService = accessKeyService;
         this.botApiInfoDtoMapper = botApiInfoDtoMapper;
         this.viewTelegramGroupDtoMapper = viewTelegramGroupDtoMapper;
     }
@@ -71,8 +75,10 @@ public class BotApiInfoController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AccessKeyDto> generateAccessKey(@PathVariable String id) {
         BotApiInfo botApiInfo = botApiInfoService.getBotApiInfoById(id);
-        String accessKey = botApiInfoService.generateAccessKeyForBotApi(botApiInfo);
-        return ok(new AccessKeyDto(accessKey));
+        AccessKey accessKey = accessKeyService.generateAccessKey();
+        botApiInfo.getAccessKeys().add(accessKey);
+        botApiInfoService.updateBotApiInfo(botApiInfo);
+        return ok(new AccessKeyDto(accessKey.getRawKey()));
     }
 
     @GetMapping("/active-group")

@@ -11,8 +11,6 @@ public interface BotApiInfoService {
 
     BotApiInfo getBotApiInfoById(String id);
 
-    String generateAccessKeyForBotApi(BotApiInfo botApiInfo);
-
     BotApiInfo createDefaultBotApiInfo();
 
     void updateBotApiInfo(BotApiInfo botApiInfo);

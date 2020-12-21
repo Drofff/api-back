@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ua.ozzy.apiback.enums.ApiStatus;
 import ua.ozzy.apiback.exception.ConfigNotSetException;
 import ua.ozzy.apiback.exception.ValidationException;
-import ua.ozzy.apiback.model.AccessKey;
 import ua.ozzy.apiback.model.BotApiInfo;
 import ua.ozzy.apiback.model.TelegramGroup;
 import ua.ozzy.apiback.repository.BotApiInfoRepository;
@@ -25,11 +24,8 @@ public class BotApiInfoServiceImpl implements BotApiInfoService {
 
     private final BotApiInfoRepository botApiInfoRepository;
 
-    private final AccessKeyService accessKeyService;
-
-    public BotApiInfoServiceImpl(BotApiInfoRepository botApiInfoRepository, AccessKeyService accessKeyService) {
+    public BotApiInfoServiceImpl(BotApiInfoRepository botApiInfoRepository) {
         this.botApiInfoRepository = botApiInfoRepository;
-        this.accessKeyService = accessKeyService;
     }
 
     @Override
@@ -54,15 +50,6 @@ public class BotApiInfoServiceImpl implements BotApiInfoService {
     public BotApiInfo getBotApiInfoById(String id) {
         return botApiInfoRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("Bot API with id '" + id + "' doesn't exist"));
-    }
-
-    @Override
-    public String generateAccessKeyForBotApi(BotApiInfo botApiInfo) {
-        validateNotNull(botApiInfo, "Can't generate an access key for the null Bot API");
-        AccessKey accessKey = accessKeyService.generateAccessKey();
-        botApiInfo.getAccessKeys().add(accessKey);
-        botApiInfoRepository.save(botApiInfo);
-        return accessKey.getRawKey();
     }
 
     @Override
