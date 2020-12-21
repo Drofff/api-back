@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import ua.ozzy.apiback.encoder.Sha512PasswordEncoder;
 import ua.ozzy.apiback.filter.AuthorizationFilter;
 import ua.ozzy.apiback.repository.AdminRepository;
 import ua.ozzy.apiback.service.AuthorizationService;
@@ -36,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -65,10 +63,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider daoAuthProvider = new DaoAuthenticationProvider();
         daoAuthProvider.setUserDetailsService(userDetailsService);
-        daoAuthProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthProvider.setPasswordEncoder(passwordEncoder);
         return daoAuthProvider;
     }
 
@@ -76,11 +74,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     UserDetailsService userDetailsService(AdminRepository adminRepository) {
         return username -> adminRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with such an username doesn't exist"));
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new Sha512PasswordEncoder();
     }
 
     @Bean
