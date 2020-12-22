@@ -8,10 +8,9 @@ import org.springframework.web.client.RestTemplate;
 import ua.ozzy.apiback.configuration.properties.BotApiProperties;
 import ua.ozzy.apiback.dto.UpdateFeedbackInBotApiDto;
 import ua.ozzy.apiback.exception.ApiBackException;
+import ua.ozzy.apiback.mapper.UpdateFeedbackInBotApiDtoMapper;
 import ua.ozzy.apiback.model.Feedback;
-import ua.ozzy.apiback.model.Status;
 import ua.ozzy.apiback.model.StatusReport;
-import ua.ozzy.apiback.model.TelegramUser;
 
 import java.util.List;
 import java.util.Map;
@@ -25,28 +24,26 @@ public class HttpBotApiUpdateService implements BotApiUpdateService {
 
     private final RestTemplate restTemplate;
 
-    public HttpBotApiUpdateService(BotApiProperties botApiProperties, RestTemplate restTemplate) {
+    private final UpdateFeedbackInBotApiDtoMapper updateFeedbackInBotApiDtoMapper;
+
+    public HttpBotApiUpdateService(BotApiProperties botApiProperties, RestTemplate restTemplate,
+                                   UpdateFeedbackInBotApiDtoMapper updateFeedbackInBotApiDtoMapper) {
         this.botApiProperties = botApiProperties;
         this.restTemplate = restTemplate;
+        this.updateFeedbackInBotApiDtoMapper = updateFeedbackInBotApiDtoMapper;
     }
 
     @Override
     public void sendFeedbackUpdate(Feedback feedback) {
         try {
             String url = botApiProperties.getFeedbackUpdateUrl();
-            UpdateFeedbackInBotApiDto feedbackDto = asDto(feedback);
+            UpdateFeedbackInBotApiDto feedbackDto = updateFeedbackInBotApiDtoMapper.toDto(feedback);
             String accessKey = botApiProperties.getAccessKey();
             Map<String, String> queryParams = Map.of("accessKey", accessKey);
             restTemplate.put(url, feedbackDto, queryParams);
         } catch (RestClientException e) {
             throw new ApiBackException(e);
         }
-    }
-
-    private UpdateFeedbackInBotApiDto asDto(Feedback feedback) {
-        Status status = feedback.getStatus();
-        TelegramUser assignedUser = feedback.getAssignedUser();
-        return new UpdateFeedbackInBotApiDto(status.getId(), assignedUser.getId());
     }
 
     @Override

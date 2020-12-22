@@ -1,30 +1,77 @@
 package ua.ozzy.apiback.dto;
 
+import java.time.LocalDateTime;
+
 public class UpdateFeedbackInBotApiDto {
 
-    String statusId;
+    private String id;
 
-    String assignedUserId;
+    private Short rate;
 
-    public UpdateFeedbackInBotApiDto(String statusId, String assignedUserId) {
-        this.statusId = statusId;
-        this.assignedUserId = assignedUserId;
+    private String comment;
+
+    private StatusDto status;
+
+    private CustomerDto customer;
+
+    private TelegramUserDto assignedUser;
+
+    private LocalDateTime dateTime;
+
+    public String getId() {
+        return id;
     }
 
-    public String getStatusId() {
-        return statusId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setStatusId(String statusId) {
-        this.statusId = statusId;
+    public Short getRate() {
+        return rate;
     }
 
-    public String getAssignedUserId() {
-        return assignedUserId;
+    public void setRate(Short rate) {
+        this.rate = rate;
     }
 
-    public void setAssignedUserId(String assignedUserId) {
-        this.assignedUserId = assignedUserId;
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public StatusDto getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusDto status) {
+        this.status = status;
+    }
+
+    public CustomerDto getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerDto customer) {
+        this.customer = customer;
+    }
+
+    public TelegramUserDto getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(TelegramUserDto assignedUser) {
+        this.assignedUser = assignedUser;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
 }
