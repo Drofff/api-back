@@ -50,4 +50,24 @@ public class TelegramGroupServiceImpl implements TelegramGroupService {
         return telegramGroupRepository.findByChatId(chatId).isPresent();
     }
 
+    @Override
+    public void deleteTelegramGroup(TelegramGroup telegramGroup) {
+        validateNotNull(telegramGroup, "Cannot delete a null group");
+        validateNotNull(telegramGroup.getId(), "Missing an id for the provided group");
+        validateIsNotActive(telegramGroup);
+        telegramGroupRepository.delete(telegramGroup);
+    }
+
+    private void validateIsNotActive(TelegramGroup telegramGroup) {
+        if (isSelectedAsActiveGroup(telegramGroup)) {
+            throw new ValidationException("Cannot delete an active group");
+        }
+    }
+
+    private boolean isSelectedAsActiveGroup(TelegramGroup telegramGroup) {
+        String tgId = telegramGroup.getId();
+        TelegramGroup tg = telegramGroupRepository.getOne(tgId);
+        return !tg.getActiveForBotApis().isEmpty();
+    }
+
 }

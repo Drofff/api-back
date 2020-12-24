@@ -12,4 +12,6 @@ public interface TelegramGroupService {
 
     void createTelegramGroup(TelegramGroup telegramGroup);
 
+    void deleteTelegramGroup(TelegramGroup telegramGroup);
+
 }

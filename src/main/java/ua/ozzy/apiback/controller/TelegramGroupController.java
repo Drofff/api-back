@@ -48,4 +48,12 @@ public class TelegramGroupController {
         return ok(new MessageDto("Telegram group has been successfully added"));
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<MessageDto> deleteTelegramGroup(@PathVariable String id) {
+        TelegramGroup tg = telegramGroupService.getTelegramGroupById(id);
+        telegramGroupService.deleteTelegramGroup(tg);
+        return ok(new MessageDto("Telegram group has been successfully deleted"));
+    }
+
 }

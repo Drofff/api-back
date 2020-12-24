@@ -2,8 +2,11 @@ package ua.ozzy.apiback.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class TelegramGroup {
@@ -16,6 +19,9 @@ public class TelegramGroup {
 
     @NotNull(message = "Telegram group chat id is required for bot to communicate")
     private Long chatId;
+
+    @OneToMany(mappedBy = "activeGroup")
+    private List<BotApiInfo> activeForBotApis = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -39,6 +45,14 @@ public class TelegramGroup {
 
     public void setChatId(Long chatId) {
         this.chatId = chatId;
+    }
+
+    public List<BotApiInfo> getActiveForBotApis() {
+        return activeForBotApis;
+    }
+
+    public void setActiveForBotApis(List<BotApiInfo> activeForBotApis) {
+        this.activeForBotApis = activeForBotApis;
     }
 
 }
