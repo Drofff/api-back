@@ -1,5 +1,7 @@
 package ua.ozzy.apiback.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +16,7 @@ public class Customer {
     private String name;
 
     @NotBlank(message = "Phone number is required")
+    @Length(min = 10, max = 10, message = "Incorrect phone number format")
     private String phoneNumber;
 
     public String getId() {
