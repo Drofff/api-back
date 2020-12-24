@@ -11,6 +11,8 @@ public class BotApiProperties {
 
     private String feedbackUpdateUrl;
 
+    private String statusReportUrl;
+
     public String getAccessKey() {
         return accessKey;
     }
@@ -25,6 +27,14 @@ public class BotApiProperties {
 
     public void setFeedbackUpdateUrl(String feedbackUpdateUrl) {
         this.feedbackUpdateUrl = feedbackUpdateUrl;
+    }
+
+    public String getStatusReportUrl() {
+        return statusReportUrl;
+    }
+
+    public void setStatusReportUrl(String statusReportUrl) {
+        this.statusReportUrl = statusReportUrl;
     }
 
 }
