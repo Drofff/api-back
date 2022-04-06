@@ -12,12 +12,14 @@ import static ua.ozzy.apiback.util.ValidationUtil.validateNotNull;
 public class CustomerServiceImpl implements CustomerService {
 
     private final PhoneNumberCountryCodeService phoneNumberCountryCodeService;
+    private final CrmService crmService;
 
     private final CustomerRepository customerRepository;
 
     public CustomerServiceImpl(PhoneNumberCountryCodeService phoneNumberCountryCodeService,
-                               CustomerRepository customerRepository) {
+                               CrmService crmService, CustomerRepository customerRepository) {
         this.phoneNumberCountryCodeService = phoneNumberCountryCodeService;
+        this.crmService = crmService;
         this.customerRepository = customerRepository;
     }
 
@@ -42,7 +44,9 @@ public class CustomerServiceImpl implements CustomerService {
     private Customer createCustomer(Customer customer) {
         validate(customer, "Customer should not be null");
         customer.setId(DbUtil.generateId());
-        return customerRepository.save(customer);
+        customerRepository.save(customer);
+        crmService.createCustomer(customer);
+        return customer;
     }
 
 }

@@ -15,6 +15,7 @@ import ua.ozzy.apiback.mapper.UpdateFeedbackRequestTelegramUserDtoMapper;
 import ua.ozzy.apiback.model.Feedback;
 import ua.ozzy.apiback.model.Status;
 import ua.ozzy.apiback.model.TelegramUser;
+import ua.ozzy.apiback.service.BotApiFeedbackService;
 import ua.ozzy.apiback.service.FeedbackService;
 import ua.ozzy.apiback.service.StatusService;
 import ua.ozzy.apiback.service.TelegramUserService;
@@ -26,6 +27,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class FeedbackController {
 
     private final FeedbackService feedbackService;
+    private final BotApiFeedbackService botApiFeedbackService;
     private final StatusService statusService;
     private final TelegramUserService telegramUserService;
 
@@ -33,10 +35,12 @@ public class FeedbackController {
     private final CreateFeedbackRequestDtoMapper createFeedbackRequestDtoMapper;
     private final UpdateFeedbackRequestTelegramUserDtoMapper updateFeedbackRequestTelegramUserDtoMapper;
 
-    public FeedbackController(FeedbackService feedbackService, StatusService statusService, TelegramUserService telegramUserService,
+    public FeedbackController(FeedbackService feedbackService, BotApiFeedbackService botApiFeedbackService,
+                              StatusService statusService, TelegramUserService telegramUserService,
                               FeedbackDtoMapper feedbackDtoMapper, CreateFeedbackRequestDtoMapper createFeedbackRequestDtoMapper,
                               UpdateFeedbackRequestTelegramUserDtoMapper updateFeedbackRequestTelegramUserDtoMapper) {
         this.feedbackService = feedbackService;
+        this.botApiFeedbackService = botApiFeedbackService;
         this.statusService = statusService;
         this.telegramUserService = telegramUserService;
         this.feedbackDtoMapper = feedbackDtoMapper;
@@ -60,7 +64,7 @@ public class FeedbackController {
     @PreAuthorize("hasAuthority('BOT_API')")
     public ResponseEntity<FeedbackDto> createFeedback(@RequestBody CreateFeedbackRequestDto createFbReqDto) {
         Feedback feedback = createFeedbackRequestDtoMapper.toEntity(createFbReqDto);
-        Feedback savedFeedback = feedbackService.createFeedback(feedback);
+        Feedback savedFeedback = botApiFeedbackService.createFeedback(feedback);
         return ok(feedbackDtoMapper.toDto(savedFeedback));
     }
 
@@ -70,7 +74,8 @@ public class FeedbackController {
                                                              @RequestBody BotApiUpdateFeedbackRequestDto updateDto) {
         Feedback feedback = feedbackService.getFeedbackById(id);
         applyFeedbackUpdate(feedback, updateDto);
-        Feedback updatedFeedback = feedbackService.updateFeedbackForRequester(feedback, updateDto.getRequesterId());
+        String requesterId = updateDto.getRequesterId();
+        Feedback updatedFeedback = botApiFeedbackService.updateFeedbackForRequester(feedback, requesterId);
         return ok(feedbackDtoMapper.toDto(updatedFeedback));
     }
 
